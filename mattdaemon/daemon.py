@@ -35,11 +35,11 @@ class RootCheck:
 			if os.getuid() == RootCheck.ids['root']:
 				sys.stdout.write("This script does not require root, but you've given it that anyway.\n")
 				sys.stdout.write("It is very poor practice to run a script with more privilege than it needs.\n")
-				sys.stdout.write("Please re-run the script without root accessn")
+				sys.stdout.write("Please re-run the script without root access")
 				sys.exit(1)
 
 
-class Daemon:
+class daemon:
 	"""
 	A generic daemon class.
 	

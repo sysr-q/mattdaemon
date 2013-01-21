@@ -10,21 +10,21 @@
 # So we can iterate through args.
 import sys
 # Matt Daemon's class
-import daemon
+import mattdaemon
 
 # This is what you have to do to daemonize stuff.
 # Easy-peasy! Just override Daemon.run() and go!
-class MyDaemon(daemon.Daemon):
+class MyDaemon(mattdaemon.daemon):
 	def run(self):
 		from my.project import main
 		main()
 
 if __name__ == "__main__":
 	args = {
-		"pidfile": "/tmp/matt-daemon.pid",
+		"pidfile": "/tmp/example-daemon.pid",
 		"root": False # does this script require root?
 	}
-	daem = MyDaemon(**args) # alternatively: MyDaemon("/tmp/matt-daemon.pid")
+	daem = MyDaemon(**args) # alternatively: MyDaemon("/tmp/example-daemon.pid")
 
 	for arg in sys.argv[1:]: # not including script name
 		arg = arg.lower()
