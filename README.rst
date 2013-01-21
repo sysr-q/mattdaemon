@@ -32,7 +32,7 @@ Notes
 Running / Usage
 ---------------
 
-- Add the script to your dependencies, it's on pypi! (`pip install mattdaemon`)
+- Add the script to your dependencies, it's on pypi! (``pip install mattdaemon``)
 - See the example files on the `git repo`_ for usage.
 
 Author
