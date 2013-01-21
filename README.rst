@@ -4,6 +4,7 @@ mattdaemon
 .. _Python: https://python.org
 .. _git repo: https://github.com/plausibility/mattdaemon
 .. _plausibility: https://github.com/plausibility
+.. _readthedocs: https://mattdaemon.readthedocs.org
 
 Need to daemonize your Python2.7 projects? Matt Daemon has you covered.
 
@@ -33,7 +34,11 @@ Running / Usage
 ---------------
 
 - Add the script to your dependencies, it's on pypi! (``pip install mattdaemon``)
-- See the example files on the `git repo`_ for usage.
+- Documentation is available on `readthedocs`_, so check there for usage.
+
+Contributing
+------------
+If a feature you need is lacking, you know a better way to do something, or you just want to be nice and give out your stars, feel free to visit the mattdaemon `git repo`_; it's open source and MIT licensed!
 
 Author
 ------
