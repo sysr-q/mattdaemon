@@ -25,7 +25,7 @@ Here is how you'd make a simple daemon instance.
     import mattdaemon
 
     class MyDaemon(mattdaemon.daemon):
-        def run(self):
+        def run(self, *args, **kwargs):
             # ... do something ...
 
     # /tmp/my-daemon.pid is our PID file.
@@ -81,6 +81,8 @@ run
 ^^^
 .. note::
     You don't actually call this; it's called by the :func:`mattdaemon.daemon.start` method.
+.. warning::
+    If you don't add the ``*args`` and ``**kwargs`` variables to the function, all sorts of hell might break loose.
 
 This is the method you override to get your daemon calling what you want it to call.
 
@@ -89,7 +91,7 @@ This is the method you override to get your daemon calling what you want it to c
     import mattdaemon
 
     class MyDaemon(mattdaemon.daemon):
-        def run(self):
+        def run(self, *args, **kwargs):
             # ...
 
 Daemonizing your app
