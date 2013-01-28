@@ -15,7 +15,7 @@ import mattdaemon
 # This is what you have to do to daemonize stuff.
 # Easy-peasy! Just override Daemon.run() and go!
 class MyDaemon(mattdaemon.daemon):
-	def run(self):
+	def run(self, *args, **kwargs):
 		from my.project import main
 		main()
 
@@ -24,7 +24,9 @@ if __name__ == "__main__":
 		"pidfile": "/tmp/example-daemon.pid",
 		"root": False # does this script require root?
 	}
-	daem = MyDaemon(**args) # alternatively: MyDaemon("/tmp/example-daemon.pid")
+	# If they've given it, don't daemonize
+	daemonize = 'start-no-daemon' not in sys.argv
+	daem = MyDaemon(**args, daemonize=daemonize) # alternatively: MyDaemon("/tmp/example-daemon.pid")
 
 	for arg in sys.argv[1:]: # not including script name
 		arg = arg.lower()
@@ -37,10 +39,6 @@ if __name__ == "__main__":
 
 		elif arg in ('start'):
 			daem.start()
-
-		elif arg in ('start-no-daemon'):
-			# For easy debugging.
-			daem.start(daemonize=False)
 
 		elif arg in ('stop'):
 			daem.stop()
