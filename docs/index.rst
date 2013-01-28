@@ -16,3 +16,4 @@ Documentation
     :maxdepth: 2
 
     usage
+    autodoc

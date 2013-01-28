@@ -45,7 +45,7 @@ class daemon:
 	
 	Usage: subclass the Daemon class and override the run() method
 	"""
-	def __init__(self, pidfile, root=False, root_chk_argv=True, stdin="/dev/null", stdout="/dev/null", stderr="/dev/null"):
+	def __init__(self, pidfile, daemonize=True, root=False, root_chk_argv=True, stdin="/dev/null", stdout="/dev/null", stderr="/dev/null"):
 		"""
 		Make our daemon instance.
 		pidfile: the file we're going to store the process id in. ex: /tmp/matt-daemon.pid
@@ -58,6 +58,7 @@ class daemon:
 		# Enforce root usage or non-usage.
 		RootCheck.check(root, check_argv=root_chk_argv)
 		self.pidfile = pidfile
+		self.should_daemonize = daemonize
 		self.stdin = stdin
 		self.stdout = stdout
 		self.stderr = stderr
@@ -110,7 +111,7 @@ class daemon:
 	def delpid(self):
 		os.remove(self.pidfile)
 
-	def start(self, daemonize=True):
+	def start(self, *args, **kwargs):
 		"""
 		Start the daemon
 		"""
@@ -127,10 +128,10 @@ class daemon:
 			sys.stderr.write(message.format(self.pidfile))
 			sys.exit(1)
 		
-		if daemonize:
+		if self.should_daemonize:
 			# Start the daemon
 			self.daemonize()
-		self.run()
+		self.run(*args, **kwargs)
 
 	def stop(self):
 		"""

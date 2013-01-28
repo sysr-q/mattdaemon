@@ -16,7 +16,7 @@ mattdaemon is on `pypi`_, so you just have to ``pip install mattdaemon``, and yo
 Setup
 ^^^^^
 
-mattdaemon is fairly simple to setup, all you have to do is subclass the ``mattdaemon.daemon.daemon`` (usable as ``mattdaemon.daemon``) class, and override the ``run()`` method.
+mattdaemon is fairly simple to setup, all you have to do is subclass the :class:`mattdaemon.daemon` class, and override the :func:`mattdaemon.daemon.run` method.
 
 Here is how you'd make a simple daemon instance.
 
@@ -48,9 +48,6 @@ Use this to start and daemonize your app.
     
     daem.start()
 
-    # start without daemonizing (stay in the front)
-    daem.start(daemonize=False)
-
 stop
 ^^^^
 
@@ -62,7 +59,7 @@ stop
 restart
 ^^^^^^^
 .. note::
-    This literally just calls ``stop()`` and ``start()``, in that order.
+    This literally just calls :func:`mattdaemon.daemon.stop` and :func:`mattdaemon.daemon.start`, in that order.
 
 .. code-block:: python
 
@@ -82,8 +79,8 @@ This will return a ``True`` or ``False`` value based on whether or not the daemo
 
 run
 ^^^
-.. note:: python
-    You don't actually call this; it's called by the ``start()`` method.
+.. note::
+    You don't actually call this; it's called by the :func:`mattdaemon.daemon.start` method.
 
 This is the method you override to get your daemon calling what you want it to call.
 
@@ -100,11 +97,59 @@ Daemonizing your app
 .. note::
     These are just some good ideas to keep in mind when creating your app with mattdaemon.
 
+We don't need no daemonization
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. versionchanged:: 1.1.0
+.. note::
+    Previous to ``1.1.0``, you just pass ``daemonize=False`` to :func:`mattdaemon.daemon.start` if you don't want to daemonize.
+    This was changed to make it easier to pass through variables.
+
+If you'd like to debug your app, you'll have to stop the daemonization from happening temporarily. If you'd like to do that, you can simply pass ``daemonize=False`` through to the creation of your daemon instance, like so:
+
+.. code-block:: python
+
+    daem = MyDaemon("/tmp/my-daemon.pid", daemonize=False, **kw)
+
+Pass through variables
+^^^^^^^^^^^^^^^^^^^^^^
+.. versionadded:: 1.1.0
+.. note::
+    This makes use of the `argument lists <http://docs.python.org/2/tutorial/controlflow.html#arbitrary-argument-lists>`_ you can use in Python.
+    If you know how many args are passed in, you can simply expand the ``*args`` into variables.
+
+If you want to pass through variables from the creation of your daemon to the :func:`mattdaemon.daemon.run` method, you can easily do so by passing them into :func:`mattdaemon.daemon.start`!
+
+For example, say we want to pass some settings in from ``sys.argv``:
+
+.. code-block:: python
+    
+    #...
+    class MyDaemon(mattdaemon.daemon):
+        def run(self, *args, **kwargs):
+            for count, thing in enumerate(args):
+                print '{0}. {1}'.format(count, thing)
+
+            for k, v in kwargs.items():
+                print '{0} = {1}'.format(k, v)
+
+    #...
+    daem.start(sys.argv[0], sys.argv[1], foo=sys.argv[2], bar=sys.argv[3])
+
+If we call the script like this: ``python example.py gibson tree 50``, we'll get the output:
+
+.. code-block:: sh
+
+    $ python example.py gibson tree 50
+    0. example.py
+    1. gibson
+    foo = tree
+    bar = 50
+
 There is no std*
 ^^^^^^^^^^^^^^^^
 Why would there be? Your daemon will be running in the background. If you need the user to enter information, perhaps in a loop, you'll have to look for other ways of doing that.
 
-By default, ``sys.stdin``, ``sys.stdout`` and ``sys.stderr`` are all redirected to ``/dev/null``, they're useless now.
+By default, ``sys.stdin``, ``sys.stdout`` and ``sys.stderr`` are all redirected to ``/dev/null``, since they're useless in a deamonized app.
 
 What does this mean? If you want to log anything, you'll need to use a dedicated logger, or provide a log file to your daemon instance (example below).
 
