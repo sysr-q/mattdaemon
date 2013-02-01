@@ -7,7 +7,7 @@ def long_desc():
 
 kw = {
     "name": "mattdaemon",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "Easily daemonize your python projects",
     "long_description": long_desc(),
     "url": "https://github.com/plausibility/mattdaemon",

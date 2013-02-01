@@ -22,11 +22,12 @@ class MyDaemon(mattdaemon.daemon):
 if __name__ == "__main__":
 	args = {
 		"pidfile": "/tmp/example-daemon.pid",
-		"root": False # does this script require root?
+		"root": False, # does this script require root?
+		# If they've given it, don't daemonize
+		"daemonize": 'start-no-daemon' not in sys.argv
 	}
-	# If they've given it, don't daemonize
-	daemonize = 'start-no-daemon' not in sys.argv
-	daem = MyDaemon(**args, daemonize=daemonize) # alternatively: MyDaemon("/tmp/example-daemon.pid")
+	
+	daem = MyDaemon(**args) # alternatively: MyDaemon("/tmp/example-daemon.pid")
 
 	for arg in sys.argv[1:]: # not including script name
 		arg = arg.lower()
